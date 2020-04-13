@@ -6,18 +6,21 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import rs.ac.ni.pmf.web.model.api.DrugDTO;
+import rs.ac.ni.pmf.web.model.entity.DrugEntity;
 import rs.ac.ni.pmf.web.model.mapper.DrugMapper;
+import rs.ac.ni.pmf.web.provider.DataProvider;
 
 @Service
 @RequiredArgsConstructor
 public class DrugService {
 
-	private final DrugProvider drugProvider;
+	private final DataProvider drugProvider;
 	private final DrugMapper drugMapper;
 
 	public ArrayList<DrugDTO> getAllDrugs() {
-		return drugProvider.getAllTickets().stream().map(drugMapper::toDto).collect(Collectors.toList());
+		return (ArrayList<DrugDTO>)  drugProvider.getAllDrugs().stream().map(drugMapper::toDto).collect(Collectors.toList());
 	}
 
 	public DrugDTO getDrug(int id) {
@@ -25,7 +28,8 @@ public class DrugService {
 	}
 
 	public DrugDTO createDrug(DrugDTO drug) {
-		return null;
+		DrugEntity entity = drugProvider.createDrug(drug);
+		return drugMapper.toDto(entity);
 	}
 
 	public DrugDTO updateDrug(int id, DrugDTO ticket) {
